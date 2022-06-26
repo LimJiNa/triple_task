@@ -49,11 +49,11 @@ CREATE TABLE point_history (
 3. 터미널 또는 cmd 접속하기<br>
 4. 생성한 jar 파일 위치로 이동하기<br>
 5. **java -jar [생성한 jar 파일명].jar** 입력하여 jar 파일 실행하기<br>
-6. **localhost:8080/** 호스트&포트 정보로 API 정보 호출하기<br>
+6. **localhost:8080/** URL로 API 정보 호출하기<br>
 - **프로젝트 jar 파일 다운로드**<br>
 1. https://drive.google.com/file/d/1ZSKpsrPDocEGB-Aol6RoyIn7h6JqcolH/view?usp=sharing
 2. 위 링크로 Maven build 해놓은 jar 파일 다운로드 받기<br>
 3. 터미널 또는 cmd 접속하기<br>
 4. 다운로드 받은 jar 파일 위치로 이동하기<br>
 5. **java -jar triple-task.jar** 입력하여 jar 파일 실행하기<br>
-6. **localhost:8080/** 호스트&포트 정보로 API 정보 호출
+6. **localhost:8080/** URL로 API 정보 호출
