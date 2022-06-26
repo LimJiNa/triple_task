@@ -3,7 +3,7 @@ package com.triple.mileage.service;
 import java.util.List;
 
 import com.triple.mileage.dto.EventDTO;
-import com.triple.mileage.dto.HistoryDTO;
+import com.triple.mileage.dto.PointHistoryDTO;
 import com.triple.mileage.dto.PointDTO;
 
 /**
@@ -14,17 +14,17 @@ public interface EventService {
 	/**
 	 * (전체) 포인트 부여 히스토리 조회
 	 * 
-	 * @return List<HistoryDTO>
+	 * @return List<PointHistoryDTO>
 	 */
-	public List<HistoryDTO> getHistory();
+	public List<PointHistoryDTO> getPointHistory();
 
 	/**
 	 * (개인) 포인트 부여 히스토리 조회
 	 * 
 	 * @param String userId
-	 * @return List<HistoryDTO>
+	 * @return List<PointHistoryDTO>
 	 */
-	public List<HistoryDTO> getHistoryByUser(String userId);
+	public List<PointHistoryDTO> getPointHistoryByUser(String userId);
 
 	/**
 	 * 사용자 누적 포인트 조회

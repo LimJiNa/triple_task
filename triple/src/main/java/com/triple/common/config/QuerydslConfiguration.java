@@ -1,4 +1,4 @@
-package com.triple.mileage.common.config;
+package com.triple.common.config;
 
 import javax.persistence.EntityManager;
 

@@ -1,6 +1,6 @@
 package com.triple.mileage.repository;
 
-import static com.triple.mileage.domain.QHistory.history;
+import static com.triple.mileage.domain.QPointHistory.pointHistory;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,10 +10,10 @@ import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.triple.mileage.common.constants.CommonConstants;
-import com.triple.mileage.domain.History;
-import com.triple.mileage.dto.HistoryDTO;
-import com.triple.mileage.dto.QHistoryDTO;
+import com.triple.common.constants.CommonConstants;
+import com.triple.mileage.domain.PointHistory;
+import com.triple.mileage.dto.PointHistoryDTO;
+import com.triple.mileage.dto.QPointHistoryDTO;
 
 import lombok.RequiredArgsConstructor;;
 
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;;
  */
 @Repository
 @RequiredArgsConstructor
-public class HistoryRepository {
+public class PointHistoryRepository {
 
 	private final EntityManager entityManager;
 	
@@ -31,20 +31,20 @@ public class HistoryRepository {
 	/**
 	 * (전체) 포인트 부여 히스토리 조회
 	 * 
-	 * @return List<HistoryDTO>
+	 * @return List<PointHistoryDTO>
 	 */
-	public List<HistoryDTO> getHistory() {
+	public List<PointHistoryDTO> getPointHistory() {
 		return queryFactory
-				.select(new QHistoryDTO(
-					history.action,
-					history.reviewId,
-					history.userId,
-					history.placeId,
-					history.saveDateTime,
-					history.point
+				.select(new QPointHistoryDTO(
+					pointHistory.action,
+					pointHistory.reviewId,
+					pointHistory.userId,
+					pointHistory.placeId,
+					pointHistory.saveDateTime,
+					pointHistory.point
 				))
-				.from(history)
-				.orderBy(history.saveDateTime.desc())
+				.from(pointHistory)
+				.orderBy(pointHistory.saveDateTime.desc())
 				.fetch();
 	}
 	
@@ -52,33 +52,33 @@ public class HistoryRepository {
 	 * (개인) 포인트 부여 히스토리 조회
 	 * 
 	 * @param String userId
-	 * @return List<HistoryDTO>
+	 * @return List<PointHistoryDTO>
 	 */
-	public List<HistoryDTO> getHistoryByUser(String userId) {
+	public List<PointHistoryDTO> getPointHistoryByUser(String userId) {
 		return queryFactory
-				.select(new QHistoryDTO(
-					history.action,
-					history.reviewId,
-					history.userId,
-					history.placeId,
-					history.saveDateTime,
-					history.point
+				.select(new QPointHistoryDTO(
+					pointHistory.action,
+					pointHistory.reviewId,
+					pointHistory.userId,
+					pointHistory.placeId,
+					pointHistory.saveDateTime,
+					pointHistory.point
 				))
-				.from(history)
+				.from(pointHistory)
 				.where(
-					history.userId.eq(userId)
+					pointHistory.userId.eq(userId)
 				)
-				.orderBy(history.saveDateTime.desc())
+				.orderBy(pointHistory.saveDateTime.desc())
 				.fetch();
 	}
 	
 	/**
 	 * 포인트 부여 히스토리 저장
 	 * 
-	 * @param History history
+	 * @param PointHistory pointHistory
 	 */
-	public void save(History history) {
-		entityManager.persist(history);
+	public void save(PointHistory pointHistory) {
+		entityManager.persist(pointHistory);
 	}
 	
 	/**
@@ -88,10 +88,10 @@ public class HistoryRepository {
 	 */
 	public void updateDeleteYn(String reviewId) {
 		queryFactory
-			.update(history)
-			.set(history.deleteYn, CommonConstants.DELETE_Y)
+			.update(pointHistory)
+			.set(pointHistory.deleteYn, CommonConstants.DELETE_Y)
 			.where(
-				history.reviewId.eq(reviewId)
+				pointHistory.reviewId.eq(reviewId)
 			)
 			.execute();
 		
@@ -108,13 +108,13 @@ public class HistoryRepository {
 	public Optional<Long> getReviewTotalPoint(String reviewId) {
 		return Optional.ofNullable(queryFactory
 				.select(
-					history.point.sum()
+					pointHistory.point.sum()
 				)
-				.from(history)
+				.from(pointHistory)
 				.where(
-					history.reviewId.eq(reviewId)
+					pointHistory.reviewId.eq(reviewId)
 				)
-				.groupBy(history.reviewId)
+				.groupBy(pointHistory.reviewId)
 				.fetchOne());
 	}
 	
@@ -127,14 +127,14 @@ public class HistoryRepository {
 	public Optional<Integer> getReviewAttachedCount(String reviewId) {
 		return Optional.ofNullable(queryFactory
 				.select(
-					history.attachedCount
+					pointHistory.attachedCount
 				)
-				.from(history)
+				.from(pointHistory)
 				.where(
-					history.reviewId.eq(reviewId),
-					history.deleteYn.eq(CommonConstants.DELETE_N)
+					pointHistory.reviewId.eq(reviewId),
+					pointHistory.deleteYn.eq(CommonConstants.DELETE_N)
 				)
-				.orderBy(history.saveDateTime.desc())
+				.orderBy(pointHistory.saveDateTime.desc())
 				.fetchFirst());
 	}
 	
@@ -147,12 +147,12 @@ public class HistoryRepository {
 	public Optional<String> firstReviewChecking(String placeId) {
 		return Optional.ofNullable(queryFactory
 				.select(
-					history.reviewId
+					pointHistory.reviewId
 				)
-				.from(history)
+				.from(pointHistory)
 				.where(
-					history.placeId.eq(placeId),
-					history.deleteYn.eq(CommonConstants.DELETE_N)
+					pointHistory.placeId.eq(placeId),
+					pointHistory.deleteYn.eq(CommonConstants.DELETE_N)
 				)
 				.fetchFirst());
 	}
@@ -167,13 +167,13 @@ public class HistoryRepository {
 	public Optional<String> alreadyReviewChecking(String userId, String placeId) {
 		return Optional.ofNullable(queryFactory
 				.select(
-					history.placeId
+					pointHistory.placeId
 				)
-				.from(history)
+				.from(pointHistory)
 				.where(
-					history.userId.eq(userId),
-					history.placeId.eq(placeId),
-					history.deleteYn.eq(CommonConstants.DELETE_N)
+					pointHistory.userId.eq(userId),
+					pointHistory.placeId.eq(placeId),
+					pointHistory.deleteYn.eq(CommonConstants.DELETE_N)
 				)
 				.fetchFirst());
 	}

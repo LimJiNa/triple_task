@@ -1,4 +1,4 @@
-package com.triple.mileage.common.exception;
+package com.triple.common.exception;
 
 /**
  * REVIEW 타입 외의 경우 예외 처리

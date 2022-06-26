@@ -79,7 +79,7 @@ public class PointRepository {
 	 * @param String userId
 	 * @return Optional<Long> accuePoint
 	 */
-	public Optional<Long> getUserAccuePoint(String userId) {
+	public Optional<Long> getAccuePointByUser(String userId) {
 		return Optional.ofNullable(queryFactory
 				.select(
 					point.accuePoint

@@ -20,9 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.triple.mileage.common.response.CommonResponseData;
-import com.triple.mileage.common.response.CommonResponseError;
-import com.triple.mileage.common.response.CommonResponseList;
+import com.triple.common.constants.CommonConstants;
+import com.triple.common.response.CommonResponseData;
+import com.triple.common.response.CommonResponseError;
+import com.triple.common.response.CommonResponseList;
 import com.triple.mileage.dto.EventDTO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -92,10 +93,10 @@ public class EventControllerTest {
 	public void fail_savePointDiffrentTypeTest() throws Exception {
 		EventDTO eventDto = new EventDTO(
 				"CREATE",
-				"ADD",
+				CommonConstants.ACTION_ADD,
 				"240a0658-dc5f-4878-9381-ebb7b2667772",
 				"포인트 적립 테스트!",
-				attachedPhotoIds2(),
+				twoAttached(),
 				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
 				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"
 		);
@@ -122,11 +123,11 @@ public class EventControllerTest {
 	@DisplayName("포인트 부여 히스토리 저장 - 액션 체크")
 	public void fail_savePointDiffrentActionTest() throws Exception {
 		EventDTO eventDto = new EventDTO(
-				"REVIEW",
+				CommonConstants.TYPE,
 				"UPDATE",
 				"240a0658-dc5f-4878-9381-ebb7b2667772",
 				"포인트 적립 테스트!",
-				attachedPhotoIds2(),
+				twoAttached(),
 				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
 				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"
 		);
@@ -153,11 +154,11 @@ public class EventControllerTest {
 	@DisplayName("포인트 부여 히스토리 저장 && 동일 장소 리뷰 저장 체크")
 	public void savePointAndAlreadyReviewErrorTest() throws Exception {
 		EventDTO eventDto = new EventDTO(
-				"REVIEW",
-				"ADD",
+				CommonConstants.TYPE,
+				CommonConstants.ACTION_ADD,
 				"240a0658-dc5f-4878-9381-ebb7b2667772",
 				"포인트 적립 테스트!",
-				attachedPhotoIds2(),
+				twoAttached(),
 				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
 				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"
 		);
@@ -197,11 +198,11 @@ public class EventControllerTest {
 	@DisplayName("포인트 부여 히스토리 수정 - 사진 1장 삭제")
 	public void updatePointDeleteOnePhotoTest() throws Exception {
 		EventDTO eventDto = new EventDTO(
-				"REVIEW",
-				"MOD",
+				CommonConstants.TYPE,
+				CommonConstants.ACTION_MOD,
 				"240a0658-dc5f-4878-9381-ebb7b2667772",
 				"포인트 적립 테스트!",
-				attachedPhotoIds1(),
+				oneAttached(),
 				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
 				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"
 		);
@@ -226,11 +227,11 @@ public class EventControllerTest {
 	@DisplayName("포인트 부여 히스토리 수정 - 사진 모두 삭제")
 	public void updatePointDeleteAllPhotoTest() throws Exception {
 		EventDTO eventDto = new EventDTO(
-				"REVIEW",
-				"MOD",
+				CommonConstants.TYPE,
+				CommonConstants.ACTION_MOD,
 				"240a0658-dc5f-4878-9381-ebb7b2667772",
 				"포인트 적립 테스트!",
-				attachedPhotoIds0(),
+				noneAttached(),
 				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
 				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"
 		);
@@ -255,11 +256,11 @@ public class EventControllerTest {
 	@DisplayName("포인트 부여 히스토리 삭제")
 	public void deletePointTest() throws Exception {
 		EventDTO eventDto = new EventDTO(
-				"REVIEW",
-				"DELETE",
+				CommonConstants.TYPE,
+				CommonConstants.ACTION_DELETE,
 				"240a0658-dc5f-4878-9381-ebb7b2667772",
 				"포인트 적립 테스트!",
-				attachedPhotoIds1(),
+				oneAttached(),
 				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
 				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"
 		);
@@ -280,20 +281,49 @@ public class EventControllerTest {
 		assertNotNull(response, "The class must not be null");
 	}
 	
-	public List<String> attachedPhotoIds2() {
+	@Test
+	@DisplayName("포인트 부여 히스토리 저장 - 파라미터 조건 체크")
+	public void fail_valiCheckTest() throws Exception {
+		EventDTO eventDto = new EventDTO(
+				CommonConstants.TYPE,
+				CommonConstants.ACTION_ADD,
+				"240a0658-dc5f-4878-9381-ebb7b2667772",
+				"포인트 적립 테스트!",
+				oneAttached(),
+				"3ede0ef2-92b7-4817-a5f3-0c575361f7453ede0ef2-92b7-4817-a5f3-0c575361f7453ede0ef2-92b7-4817-a5f3-0c575361f7453ede0ef2-92b7-4817-a5f3-0c575361f7453ede0ef2-92b7-4817-a5f3-0c575361f7453ede0ef2-92b7-4817-a5f3-0c575361f745",
+				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"
+		);
+		
+		ResultActions resultActions = mockMvc
+				.perform(
+					post("/events")
+					.content(objectMapper.writeValueAsString(eventDto))
+					.contentType(MediaType.APPLICATION_JSON_VALUE)
+				)
+				.andExpect(status().isBadRequest());
+		
+		String content = resultActions.andReturn().getResponse().getContentAsString();
+		
+		log.info("content : {}", content);
+		
+		CommonResponseError response = objectMapper.readValue(content, CommonResponseError.class);
+		assertTrue(StringUtils.equals(response.getCode(), "METHOD_ARGUMENT_NOT_VALID"));
+	}
+	
+	public List<String> twoAttached() {
 		List<String> list = new ArrayList<>();
 		list.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
 		list.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
 		return list;
 	}
 	
-	public List<String> attachedPhotoIds1() {
+	public List<String> oneAttached() {
 		List<String> list = new ArrayList<>();
 		list.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
 		return list;
 	}
 	
-	public List<String> attachedPhotoIds0() {
+	public List<String> noneAttached() {
 		List<String> list = new ArrayList<>();
 		return list;
 	}

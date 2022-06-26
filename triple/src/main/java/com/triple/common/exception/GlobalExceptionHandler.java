@@ -1,12 +1,14 @@
-package com.triple.mileage.common.exception;
+package com.triple.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.triple.mileage.common.constants.CommonErrorCode;
-import com.triple.mileage.common.response.CommonResponseError;
+import com.triple.common.constants.CommonErrorCode;
+import com.triple.common.response.CommonResponseError;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +25,23 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(new CommonResponseError(CommonErrorCode.SYSTEM_ERROR),
 				HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(value = { MethodArgumentNotValidException.class })
+	public ResponseEntity<?> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+		pringLog(e);
+
+		String field = "";
+		String message = "";
+		for (FieldError result : e.getBindingResult().getFieldErrors()) {
+			field = result.getField();
+			message = result.getDefaultMessage();
+		}
+
+		String errorMessage = field + " " + message;
+
+		return new ResponseEntity<>(new CommonResponseError("METHOD_ARGUMENT_NOT_VALID", errorMessage),
+				HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(value = { NotExistTypeException.class })

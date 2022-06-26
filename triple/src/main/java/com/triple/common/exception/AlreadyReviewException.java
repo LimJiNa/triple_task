@@ -1,4 +1,4 @@
-package com.triple.mileage.common.exception;
+package com.triple.common.exception;
 
 /**
  * 동일 장소 리뷰 저장 예외 처리

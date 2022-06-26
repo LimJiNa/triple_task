@@ -1,4 +1,4 @@
-package com.triple.mileage.common.response;
+package com.triple.common.response;
 
 import lombok.Data;
 

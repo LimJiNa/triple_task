@@ -28,12 +28,13 @@ public class Point {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
 	private long pointId;
-	
-	@Column(nullable = false)
+
+	@Column(nullable = false, length = 40)
 	private String userId;
-	
-	@Column(nullable = false)
+
+	@Column(nullable = false, length = 20)
 	private long accuePoint;
 
 	public static Point dtoToPoint(final EventDTO eventDto) {

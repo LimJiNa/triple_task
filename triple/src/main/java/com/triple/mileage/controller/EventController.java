@@ -1,5 +1,7 @@
 package com.triple.mileage.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.triple.mileage.common.constants.CommonConstants;
-import com.triple.mileage.common.exception.NotExistActionException;
-import com.triple.mileage.common.response.CommonResponseData;
-import com.triple.mileage.common.response.CommonResponseList;
+import com.triple.common.constants.CommonConstants;
+import com.triple.common.exception.NotExistActionException;
+import com.triple.common.response.CommonResponseData;
+import com.triple.common.response.CommonResponseList;
 import com.triple.mileage.dto.EventDTO;
 import com.triple.mileage.service.EventService;
 
@@ -35,11 +37,11 @@ public class EventController {
 	 * @return Object data
 	 */
 	@GetMapping
-	public ResponseEntity<?> getHistory() {
-		log.info("/events");
+	public ResponseEntity<?> getPointHistory() {
+		log.debug("/events");
 
 		CommonResponseList response = new CommonResponseList();
-		response.setDataList(eventService.getHistory());
+		response.setDataList(eventService.getPointHistory());
 		
 		return ResponseEntity.ok().body(response);
 	}
@@ -51,11 +53,11 @@ public class EventController {
 	 * @return List<Object> dataList
 	 */
 	@GetMapping("/{userId}")
-	public ResponseEntity<?> getHistoryByUser(@PathVariable String userId) {
-		log.info("/events/{}", userId);
+	public ResponseEntity<?> getPointHistoryByUser(@PathVariable String userId) {
+		log.debug("/events/{}", userId);
 
 		CommonResponseList response = new CommonResponseList();
-		response.setDataList(eventService.getHistoryByUser(userId));
+		response.setDataList(eventService.getPointHistoryByUser(userId));
 		
 		return ResponseEntity.ok().body(response);
 	}
@@ -68,7 +70,7 @@ public class EventController {
 	 */
 	@GetMapping("/{userId}/points")
 	public ResponseEntity<?> getPointByUser(@PathVariable String userId) {
-		log.info("/events/{}/points", userId);
+		log.debug("/events/{}/points", userId);
 
 		CommonResponseData response = new CommonResponseData();
 		response.setData(eventService.getPointByUser(userId));
@@ -84,8 +86,8 @@ public class EventController {
 	 * @return Object Data
 	 */
 	@PostMapping
-	public ResponseEntity<?> savePoint(@RequestBody EventDTO eventDto) {
-		log.info("/events param : {}", eventDto);
+	public ResponseEntity<?> savePoint(@RequestBody @Valid EventDTO eventDto) {
+		log.debug("/events param : {}", eventDto);
 
 		CommonResponseData response = new CommonResponseData();
 

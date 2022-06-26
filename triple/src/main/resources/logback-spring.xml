@@ -1,0 +1,27 @@
+<configuration debug="true">
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>%d{yyyyMMdd HH:mm:ss.SSS} : [%thread] [%-5level] %logger{5} - %msg %n</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="CONSOLE-INFOLOG" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>%d{yyyyMMdd HH:mm:ss.SSS} : [%thread] [%-5level] %logger{5} - %msg %n</Pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="jdbc" level="OFF" appender-ref="CONSOLE"/>
+	<logger name="jdbc.sqlonly" level="OFF" appender-ref="CONSOLE"/>
+	<logger name="jdbc.sqltiming" level="DEBUG" appender-ref="CONSOLE"/>
+	<logger name="jdbc.audit" level="OFF" appender-ref="CONSOLE"/>
+	<logger name="jdbc.resultset" level="OFF" appender-ref="CONSOLE"/>
+	<logger name="jdbc.resultsettable" level="DEBUG" appender-ref="CONSOLE"/>
+	<logger name="jdbc.connection" level="OFF" appender-ref="CONSOLE"/>
+	
+	<logger name="com.triple" level="DEBUG" appender-ref="CONSOLE_INFOLOG"/>
+	
+	<root level="OFF">
+		<appender-ref ref="CONSOLE-INFOLOG"/>
+	</root>
+</configuration>

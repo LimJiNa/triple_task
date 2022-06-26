@@ -1,4 +1,4 @@
-package com.triple.mileage.common.exception;
+package com.triple.common.exception;
 
 /**
  * ADD, MOD, DELETE 액션 외의 경우 예외 처리

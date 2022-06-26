@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Data
-public class HistoryDTO {
+public class PointHistoryDTO {
 
 	private String action;
 	private String reviewId;
@@ -23,7 +23,8 @@ public class HistoryDTO {
 	private long point;
 
 	@QueryProjection
-	public HistoryDTO(String action, String reviewId, String userId, String placeId, LocalDateTime saveDateTime, long point) {
+	public PointHistoryDTO(String action, String reviewId, String userId, String placeId, LocalDateTime saveDateTime,
+			long point) {
 		this.action = action;
 		this.reviewId = reviewId;
 		this.userId = userId;

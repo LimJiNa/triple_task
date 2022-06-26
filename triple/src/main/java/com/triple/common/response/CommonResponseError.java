@@ -1,6 +1,6 @@
-package com.triple.mileage.common.response;
+package com.triple.common.response;
 
-import com.triple.mileage.common.constants.CommonErrorCode;
+import com.triple.common.constants.CommonErrorCode;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +18,11 @@ public class CommonResponseError {
 	public CommonResponseError(CommonErrorCode commonErrorCode) {
 		this.code = commonErrorCode.getCode();
 		this.message = commonErrorCode.getMessage();
+	}
+
+	public CommonResponseError(String code, String message) {
+		this.code = code;
+		this.message = message;
 	}
 
 }

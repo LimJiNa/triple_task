@@ -26,35 +26,36 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "pointHistory", indexes = { @Index(columnList = "reviewId, userId, placeId") })
-public class History {
+@Table(indexes = { @Index(columnList = "reviewId, userId, placeId") })
+public class PointHistory {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(length = 20)
 	private long pointHistoryId;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 10)
 	private String action;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 40)
 	private String reviewId;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 40)
 	private String userId;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 40)
 	private String placeId;
 	
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private LocalDateTime saveDateTime;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
 	private long point;
 	
-	@Column(nullable = true)
+	@Column(nullable = false, length = 11)
 	private int attachedCount;
 	
-	@Column(nullable = true)
+	@Column(nullable = false, length = 1)
 	private char deleteYn;
 
 	@PrePersist
@@ -62,8 +63,8 @@ public class History {
 		this.saveDateTime = LocalDateTime.now();
 	}
 
-	public static History dtoToPointHistory(EventDTO eventDto) {
-		return History.builder()
+	public static PointHistory dtoToPointHistory(EventDTO eventDto) {
+		return PointHistory.builder()
 				.action(eventDto.getAction())
 				.reviewId(eventDto.getReviewId())
 				.userId(eventDto.getUserId())

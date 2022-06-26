@@ -1,4 +1,4 @@
-package com.triple.mileage.common.constants;
+package com.triple.common.constants;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

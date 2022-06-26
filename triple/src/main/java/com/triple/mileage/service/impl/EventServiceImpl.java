@@ -8,15 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.triple.mileage.common.constants.CommonConstants;
-import com.triple.mileage.common.exception.AlreadyReviewException;
-import com.triple.mileage.common.exception.NotExistTypeException;
-import com.triple.mileage.domain.History;
+import com.triple.common.constants.CommonConstants;
+import com.triple.common.exception.AlreadyReviewException;
+import com.triple.common.exception.NotExistTypeException;
+import com.triple.mileage.domain.PointHistory;
 import com.triple.mileage.domain.Point;
 import com.triple.mileage.dto.EventDTO;
-import com.triple.mileage.dto.HistoryDTO;
+import com.triple.mileage.dto.PointHistoryDTO;
 import com.triple.mileage.dto.PointDTO;
-import com.triple.mileage.repository.HistoryRepository;
+import com.triple.mileage.repository.PointHistoryRepository;
 import com.triple.mileage.repository.PointRepository;
 import com.triple.mileage.service.EventService;
 
@@ -27,7 +27,7 @@ import com.triple.mileage.service.EventService;
 public class EventServiceImpl implements EventService {
 
 	@Autowired
-	private HistoryRepository historyRepository;
+	private PointHistoryRepository pointHistoryRepository;
 
 	@Autowired
 	private PointRepository pointRepository;
@@ -35,22 +35,22 @@ public class EventServiceImpl implements EventService {
 	/**
 	 * (전체) 포인트 부여 히스토리 조회
 	 * 
-	 * @return List<HistoryDTO>
+	 * @return List<PointHistoryDTO>
 	 */
 	@Override
-	public List<HistoryDTO> getHistory() {
-		return historyRepository.getHistory();
+	public List<PointHistoryDTO> getPointHistory() {
+		return pointHistoryRepository.getPointHistory();
 	}
 
 	/**
 	 * (개인) 포인트 부여 히스토리 조회
 	 * 
 	 * @param String userId
-	 * @return List<HistoryDTO>
+	 * @return List<PointHistoryDTO>
 	 */
 	@Override
-	public List<HistoryDTO> getHistoryByUser(String userId) {
-		return historyRepository.getHistoryByUser(userId);
+	public List<PointHistoryDTO> getPointHistoryByUser(String userId) {
+		return pointHistoryRepository.getPointHistoryByUser(userId);
 	}
 
 	/**
@@ -77,12 +77,12 @@ public class EventServiceImpl implements EventService {
 
 		long savePoint = getSavePoint(eventDto);
 
-		History pointHistory = History.dtoToPointHistory(eventDto);
+		PointHistory pointHistory = PointHistory.dtoToPointHistory(eventDto);
 		pointHistory.setPoint(savePoint);
 		pointHistory.setDeleteYn(CommonConstants.DELETE_N);
-		historyRepository.save(pointHistory);
+		pointHistoryRepository.save(pointHistory);
 
-		Optional<Long> userAccuePoint = pointRepository.getUserAccuePoint(eventDto.getUserId());
+		Optional<Long> userAccuePoint = pointRepository.getAccuePointByUser(eventDto.getUserId());
 
 		if (userAccuePoint.isPresent()) {
 			Long accuePoint = userAccuePoint.get();
@@ -110,11 +110,11 @@ public class EventServiceImpl implements EventService {
 		long accuePoint = 0;
 		long updatePoint = getUpdatePoint(eventDto);
 
-		History pointHistory = History.dtoToPointHistory(eventDto);
+		PointHistory pointHistory = PointHistory.dtoToPointHistory(eventDto);
 		pointHistory.setPoint(updatePoint);
-		historyRepository.save(pointHistory);
+		pointHistoryRepository.save(pointHistory);
 
-		Optional<Long> userAccuePoint = pointRepository.getUserAccuePoint(eventDto.getUserId());
+		Optional<Long> userAccuePoint = pointRepository.getAccuePointByUser(eventDto.getUserId());
 
 		if (userAccuePoint.isPresent()) {
 			accuePoint = userAccuePoint.get();
@@ -138,20 +138,20 @@ public class EventServiceImpl implements EventService {
 
 		long deletePoint = 0;
 
-		Optional<Long> reviewTotalPoint = historyRepository.getReviewTotalPoint(eventDto.getReviewId());
+		Optional<Long> reviewTotalPoint = pointHistoryRepository.getReviewTotalPoint(eventDto.getReviewId());
 
 		if (reviewTotalPoint.isPresent()) {
 			deletePoint = (reviewTotalPoint.get() * -1);
 		}
 
-		History pointHistory = History.dtoToPointHistory(eventDto);
+		PointHistory pointHistory = PointHistory.dtoToPointHistory(eventDto);
 		pointHistory.setPoint(deletePoint);
-		historyRepository.save(pointHistory);
-		historyRepository.updateDeleteYn(eventDto.getReviewId());
+		pointHistoryRepository.save(pointHistory);
+		pointHistoryRepository.updateDeleteYn(eventDto.getReviewId());
 
 		long accuePoint = 0;
 
-		Optional<Long> userAccuePoint = pointRepository.getUserAccuePoint(eventDto.getUserId());
+		Optional<Long> userAccuePoint = pointRepository.getAccuePointByUser(eventDto.getUserId());
 
 		if (userAccuePoint.isPresent()) {
 			accuePoint = userAccuePoint.get();
@@ -188,7 +188,7 @@ public class EventServiceImpl implements EventService {
 		/**
 		 * 해당 장소의 첫 리뷰일 경우 점수 취득
 		 */
-		if (historyRepository.firstReviewChecking(eventDto.getPlaceId()).isEmpty()) {
+		if (pointHistoryRepository.firstReviewChecking(eventDto.getPlaceId()).isEmpty()) {
 			savePoint += CommonConstants.BONUS_POINT;
 		}
 
@@ -215,7 +215,7 @@ public class EventServiceImpl implements EventService {
 		 * 텍스트만 존재하는 리뷰에 사진만 추가되는 경우 점수 취득
 		 */
 		if (!StringUtils.isBlank(eventDto.getContent()) && !eventDto.getAttachedPhotoIds().isEmpty()) {
-			if (historyRepository.getReviewAttachedCount(eventDto.getReviewId()).get() == 0) {
+			if (pointHistoryRepository.getReviewAttachedCount(eventDto.getReviewId()).get() == 0) {
 				updatePoint += CommonConstants.ATTACHED_POINT;
 			}
 		}
@@ -240,7 +240,7 @@ public class EventServiceImpl implements EventService {
 		 * 동일 장소 리뷰 저장 예외 처리
 		 */
 		if (eventDto.getAction().equals(CommonConstants.ACTION_ADD)) {
-			if (historyRepository.alreadyReviewChecking(eventDto.getUserId(), eventDto.getPlaceId()).isPresent()) {
+			if (pointHistoryRepository.alreadyReviewChecking(eventDto.getUserId(), eventDto.getPlaceId()).isPresent()) {
 				throw new AlreadyReviewException();
 			}
 		}

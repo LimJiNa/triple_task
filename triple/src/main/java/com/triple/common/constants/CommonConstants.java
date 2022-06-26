@@ -1,4 +1,4 @@
-package com.triple.mileage.common.constants;
+package com.triple.common.constants;
 
 /**
  * 공통 상수 객체

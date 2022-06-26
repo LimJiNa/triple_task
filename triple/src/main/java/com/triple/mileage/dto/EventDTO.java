@@ -2,6 +2,10 @@ package com.triple.mileage.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,12 +18,28 @@ import lombok.NoArgsConstructor;
 @Data
 public class EventDTO {
 
+	@NotNull
 	private String type;
+	
+	@NotNull
+	@Length(max = 10)
 	private String action;
+	
+	@NotNull
+	@Length(max = 40)
 	private String reviewId;
+	
+	@NotNull
 	private String content;
+	
 	private List<String> attachedPhotoIds;
+	
+	@NotNull
+	@Length(max = 40)
 	private String userId;
+	
+	@NotNull
+	@Length(max = 40)
 	private String placeId;
 
 }
