@@ -32,7 +32,7 @@ public class EventController {
 	/**
 	 * (전체) 포인트 부여 히스토리 조회
 	 * 
-	 * @return
+	 * @return Object data
 	 */
 	@GetMapping
 	public ResponseEntity<?> getHistory() {

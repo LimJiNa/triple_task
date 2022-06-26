@@ -37,25 +37,25 @@ public interface EventService {
 	/**
 	 * 리뷰 저장으로 인한 포인트 적립 히스토리 저장 및 사용자 누적 포인트 증가
 	 * 
-	 * @param EventDTO pointDto
+	 * @param EventDTO eventDto
 	 * @return PointDTO
 	 */
-	public PointDTO savePoint(EventDTO pointDto);
+	public PointDTO savePoint(EventDTO eventDto);
 
 	/**
 	 * 리뷰 수정으로 인한 포인트 증감 히스토리 저장 및 사용자 누적 포인트 증차감
 	 * 
-	 * @param EventDTO pointDto
+	 * @param EventDTO eventDto
 	 * @return PointDTO
 	 */
-	public PointDTO updatePoint(EventDTO pointDto);
+	public PointDTO updatePoint(EventDTO eventDto);
 
 	/**
 	 * 리뷰 삭제로 인한 포인트 차감 히스토리 저장 및 사용자 누적 포인트 차감
 	 * 
-	 * @param EventDTO pointDto
+	 * @param EventDTO eventDto
 	 * @return PointDTO
 	 */
-	public PointDTO deletePoint(EventDTO pointDto);
+	public PointDTO deletePoint(EventDTO eventDto);
 
 }

@@ -67,7 +67,7 @@ public class EventServiceImpl implements EventService {
 	/**
 	 * 리뷰 저장으로 인한 포인트 적립 히스토리 저장 및 사용자 누적 포인트 증가
 	 * 
-	 * @param EventDTO pointDto
+	 * @param EventDTO eventDto
 	 * @return PointDTO
 	 */
 	@Transactional
@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService {
 	/**
 	 * 리뷰 수정으로 인한 포인트 증감 히스토리 저장 및 사용자 누적 포인트 증차감
 	 * 
-	 * @param EventDTO pointDto
+	 * @param EventDTO eventDto
 	 * @return PointDTO
 	 */
 	@Transactional
@@ -128,7 +128,7 @@ public class EventServiceImpl implements EventService {
 	/**
 	 * 리뷰 삭제로 인한 포인트 차감 히스토리 저장 및 사용자 누적 포인트 차감
 	 * 
-	 * @param EventDTO pointDto
+	 * @param EventDTO eventDto
 	 * @return PointDTO
 	 */
 	@Transactional
@@ -165,8 +165,8 @@ public class EventServiceImpl implements EventService {
 	/**
 	 * 포인트 적립시 취득 점수 계산
 	 * 
-	 * @param eventDto
-	 * @return int savePoint
+	 * @param EventDTO eventDto
+	 * @return long savePoint
 	 */
 	private long getSavePoint(EventDTO eventDto) {
 		long savePoint = 0;
@@ -198,8 +198,8 @@ public class EventServiceImpl implements EventService {
 	/**
 	 * 포인트 수정시 증차감 점수 계산
 	 * 
-	 * @param eventDto
-	 * @return int updatePoint
+	 * @param EventDTO eventDto
+	 * @return long updatePoint
 	 */
 	private long getUpdatePoint(EventDTO eventDto) {
 		long updatePoint = 0;
@@ -226,7 +226,7 @@ public class EventServiceImpl implements EventService {
 	/**
 	 * 예외처리
 	 * 
-	 * @param eventDto
+	 * @param EventDTO eventDto
 	 */
 	private void isValid(final EventDTO eventDto) {
 		/**
