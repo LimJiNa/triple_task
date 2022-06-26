@@ -97,7 +97,7 @@ public class EventController {
 			response.setData(eventService.deletePoint(eventDto));
 		} else {
 			/**
-			 * ADD, MOD, DELETE 액 외의 경우 예외 처리
+			 * ADD, MOD, DELETE 액션 외의 경우 예외 처리
 			 */
 			throw new NotExistActionException();
 		}
