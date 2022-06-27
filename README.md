@@ -57,7 +57,3 @@ CREATE TABLE point_history (
 4. 다운로드 받은 jar 파일 위치로 이동하기<br>
 5. **java -jar triple-task.jar** 입력하여 jar 파일 실행하기<br>
 6. **localhost:8080/** URL로 API 정보 호출하기
-
-## 5. ETC
-패키지명과 클래스명, API는<br>
-전달 받은 문서에서 사용되어진 단어들을 최대한 참조하여 진행하였습니다.
